@@ -18,15 +18,12 @@
         body { font-family: -apple-system, sans-serif; margin: 0; background: var(--bg); color: #fff; display: flex; justify-content: center; min-height: 100vh; overflow-x: hidden; }
         .container { width: 100%; max-width: 430px; padding: 20px; box-sizing: border-box; }
         
-        /* ESTILO DEL LOGO EN CABECERA */
-        .app-header { text-align: center; margin-bottom: 25px; }
-        .app-logo { width: 80px; height: 80px; border-radius: 18px; margin-bottom: 10px; box-shadow: 0 4px 15px rgba(46, 160, 67, 0.3); }
-        .app-title { font-size: 1.5rem; font-weight: 900; color: var(--p); margin: 0; letter-spacing: -1px; }
+        /* CABECERA SOLO LOGO */
+        .app-header { text-align: center; margin: 10px 0 30px 0; }
+        .app-logo { width: 120px; height: 120px; border-radius: 25px; box-shadow: 0 4px 20px rgba(46, 160, 67, 0.4); }
 
         #install-banner { display: none; background: var(--a); color: white; padding: 15px; border-radius: 15px; margin-bottom: 20px; text-align: center; font-weight: bold; cursor: pointer; }
         .status-pill { font-size: 0.65rem; padding: 5px 12px; border-radius: 20px; background: #1a1a1a; color: var(--a); font-weight: bold; margin-bottom: 15px; display: inline-block; border: 1px solid #333; }
-        
-        /* ANILLO Y AGUA */
         .ring-container { position: relative; width: 160px; height: 160px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; }
         .ring-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
         .ring-bg { fill: none; stroke: #1a1a1a; stroke-width: 10; }
@@ -37,8 +34,6 @@
         .water-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; margin-top: 10px; }
         .glass { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #222; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; }
         .glass.full { background: var(--water); border-color: var(--water); color: #000; box-shadow: 0 0 8px var(--water); }
-        
-        /* COMIDAS Y BOTONES */
         .meal-row { background: var(--card); border-radius: 20px; padding: 18px; margin-bottom: 12px; border: 1px solid #222; }
         .meal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
         .meal-type { color: var(--a); font-weight: 800; font-size: 0.75rem; text-transform: uppercase; }
@@ -48,14 +43,12 @@
         .macro-label { display: block; font-size: 0.55rem; color: #888; text-transform: uppercase; }
         .macro-val { font-weight: 800; font-size: 0.75rem; color: #eee; }
         .diff-badge { font-size: 0.6rem; padding: 2px 5px; border-radius: 4px; font-weight: bold; margin-top: 3px; display: inline-block; }
-        
         .days-row { display: flex; overflow-x: auto; gap: 10px; margin-bottom: 20px; padding: 5px 0; scrollbar-width: none; }
         .day-item { min-width: 55px; text-align: center; padding: 10px; border-radius: 15px; background: #111; font-size: 0.75rem; cursor: pointer; border: 1px solid #222; }
         .day-item.active { background: var(--p); color: #fff; border-color: var(--p); }
         .btn-main { background: var(--p); color: white; border: none; padding: 18px; border-radius: 15px; width: 100%; font-weight: 800; cursor: pointer; text-transform: uppercase; }
         .btn-cam { background: var(--gray); color: #fff; border: 1px solid #444; padding: 10px 14px; border-radius: 12px; font-size: 0.7rem; font-weight: bold; cursor: pointer; }
         .btn-cam.done { border-color: var(--p); color: var(--p); background: rgba(46, 160, 67, 0.1); }
-        
         input, select { width: 100%; padding: 15px; background: #111; border: 1px solid #333; border-radius: 12px; color: #fff; margin-bottom: 12px; box-sizing: border-box; font-size: 1rem; }
         .hidden { display: none !important; }
         #log { text-align: center; font-size: 0.7rem; color: var(--yellow); margin-top: 10px; font-weight: bold; min-height: 20px; padding: 10px; border-radius: 10px; }
@@ -65,11 +58,10 @@
 <body>
 
 <div class="container">
-    <div id="install-banner" onclick="installApp()">✨ INSTALAR FITAI PRO</div>
+    <div id="install-banner" onclick="installApp()">✨ INSTALAR APP</div>
 
     <div class="app-header">
         <img src="logo.png" class="app-logo" alt="Logo">
-        <h1 class="app-title">FitAI PRO</h1>
     </div>
 
     <div id="setup" class="hidden">
@@ -107,13 +99,11 @@
 </div>
 
 <script>
-    // LÓGICA DE INSTALACIÓN
     let deferredPrompt;
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault(); deferredPrompt = e;
         document.getElementById('install-banner').style.display = 'block';
     });
-
     async function installApp() {
         if (deferredPrompt) {
             deferredPrompt.prompt();
@@ -122,12 +112,10 @@
             document.getElementById('install-banner').style.display = 'none';
         }
     }
-
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./sw.js').catch(e => console.error(e));
     }
 
-    // VARIABLES Y PERSISTENCIA
     let k = localStorage.getItem('fit_k'), p = JSON.parse(localStorage.getItem('fit_p')), h = JSON.parse(localStorage.getItem('fit_h')) || [];
     let waterData = JSON.parse(localStorage.getItem('fit_w')) || {}; 
     let myPlan = JSON.parse(localStorage.getItem('fit_plan')) || null;
@@ -158,7 +146,6 @@
     }
 
     function setDate(d) { selectedDateStr = d; renderCalendar(); update(); }
-
     function toggleWater(i) {
         waterData[selectedDateStr] = (waterData[selectedDateStr] === i + 1) ? i : i + 1;
         localStorage.setItem('fit_w', JSON.stringify(waterData));
@@ -173,22 +160,19 @@
         document.getElementById('liters-count').innerText = `${(gls * 0.25).toFixed(2)} / 4.00 L`;
         const wg = document.getElementById('water-grid'); wg.innerHTML = "";
         for(let i=0; i<16; i++) wg.innerHTML += `<div class="glass ${i < gls ? 'full' : ''}" onclick="toggleWater(${i})">💧</div>`;
-
         let goal = p.goalBase;
         const list = document.getElementById('meals-list'); list.innerHTML = "";
-        
         if(myPlan && myPlan[dayName]) {
             goal = myPlan[dayName].reduce((acc, m) => acc + (m.kcal || 0), 0);
-            document.getElementById('mode-indicator').innerText = "MODO: PLAN NUTRICIONAL";
+            document.getElementById('mode-indicator').innerText = "PLAN NUTRICIONAL ACTIVO";
             myPlan[dayName].forEach(meal => {
                 const record = h.find(x => x.t === selectedDateStr && x.type === meal.tipo);
                 list.innerHTML += renderRow(meal, record);
             });
         } else {
-            document.getElementById('mode-indicator').innerText = "MODO: LIBRE";
-            list.innerHTML = `<p style="text-align:center; color:#666; font-size:0.8rem; margin-top:20px;">Sube tu dieta para comparar macros.</p>`;
+            document.getElementById('mode-indicator').innerText = "MODO LIBRE";
+            list.innerHTML = `<p style="text-align:center; color:#666; font-size:0.8rem; margin-top:20px;">Sube tu dieta para comparar.</p>`;
         }
-
         const consumed = h.filter(x => x.t === selectedDateStr).reduce((acc, x) => acc + (x.kcal || 0), 0);
         document.getElementById('target-label').innerText = `META: ${goal} KCAL`;
         document.getElementById('v-rest').innerText = Math.max(0, goal - consumed);
@@ -214,7 +198,6 @@
         </div>`;
     }
 
-    // IA GEMINI CON DIAGNÓSTICO
     function cam(type) { currentMealType = type; document.getElementById('file').click(); }
 
     async function analyzePlan() {
@@ -234,7 +217,7 @@
             myPlan = JSON.parse(d.candidates[0].content.parts[0].text.match(/\{.*\}/s)[0]);
             localStorage.setItem('fit_plan', JSON.stringify(myPlan));
             setLog("✅ DIETA CARGADA", "p"); update();
-        } catch (e) { setLog("❌ ERROR DIETA: " + e.message, "red"); }
+        } catch (e) { setLog("❌ ERROR: " + e.message, "red"); }
     }
 
     async function runAnalysis() {
@@ -245,12 +228,11 @@
         const target = (myPlan && myPlan[dayNames[new Date(selectedDateStr).getDay()]]) 
             ? myPlan[dayNames[new Date(selectedDateStr).getDay()]].find(m => m.tipo === currentMealType) 
             : {tipo: currentMealType, kcal: 500, p:30, c:50, f:15};
-
         try {
             const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${k}`, {
                 method: 'POST', headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ contents: [{ parts: [
-                    { text: `Analiza esta comida. Pauta referencia: ${JSON.stringify(target)}. Calcula kcal, p, c, f reales. Devuelve solo JSON: {kcal: num, p: num, c: num, f: num}` },
+                    { text: `Analiza foto. Referencia: ${JSON.stringify(target)}. Calcula kcal, p, c, f reales. Solo JSON: {kcal: num, p: num, c: num, f: num}` },
                     { inline_data: { mime_type: "image/jpeg", data: b64.split(',')[1] } }
                 ]}] })
             });
@@ -260,8 +242,8 @@
             h = h.filter(x => !(x.t === selectedDateStr && x.type === currentMealType));
             h.push({ ...result, t: selectedDateStr, type: currentMealType });
             localStorage.setItem('fit_h', JSON.stringify(h));
-            setLog("✅ ANALIZADO CON ÉXITO", "p"); update();
-        } catch (e) { setLog("❌ ERROR CÁMARA: " + e.message, "red"); }
+            setLog("✅ ANALIZADO", "p"); update();
+        } catch (e) { setLog("❌ ERROR: " + e.message, "red"); }
     }
 
     function setLog(txt, colorVar) {
@@ -270,7 +252,6 @@
         l.className = colorVar === "red" ? "log-error" : "";
         l.style.color = `var(--${colorVar})`;
     }
-
     const toBase64 = f => new Promise(r => { const rd = new FileReader(); rd.readAsDataURL(f); rd.onload = () => r(rd.result); });
 </script>
 </body>
