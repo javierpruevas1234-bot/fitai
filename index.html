@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -11,34 +11,38 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="apple-touch-icon" href="logo.png">
-    <link rel="manifest" href='data:application/manifest+json,{"name":"FitAI Pro","short_name":"FitAI","start_url":"index.html","display":"standalone","background_color":"#000000","theme_color":"#000000","icons":[{"src":"logo.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}]}'>
+    <link rel="manifest" href='data:application/manifest+json,{"name":"FitAI Pro","short_name":"FitAI","start_url":"index.html","display":"standalone","background_color":"#000000","theme_color":"#000000","icons":[{"src":"logo.png","sizes":"512x512","type":"image/png"}]}'>
 
     <style>
         :root { --p: #2ea043; --bg: #000; --card: #121212; --a: #58a6ff; --red: #da3633; --yellow: #d29922; --water: #00d4ff; --gray: #21262d; }
         body { font-family: -apple-system, sans-serif; margin: 0; background: var(--bg); color: #fff; display: flex; justify-content: center; min-height: 100vh; overflow-x: hidden; }
         .container { width: 100%; max-width: 430px; padding: 20px; box-sizing: border-box; }
         
-        /* Botón de instalación dinámico */
-        #install-banner { display: none; background: var(--a); color: white; padding: 15px; border-radius: 15px; margin-bottom: 20px; text-align: center; font-weight: bold; cursor: pointer; }
+        /* ESTILO DEL LOGO EN CABECERA */
+        .app-header { text-align: center; margin-bottom: 25px; }
+        .app-logo { width: 80px; height: 80px; border-radius: 18px; margin-bottom: 10px; box-shadow: 0 4px 15px rgba(46, 160, 67, 0.3); }
+        .app-title { font-size: 1.5rem; font-weight: 900; color: var(--p); margin: 0; letter-spacing: -1px; }
 
+        #install-banner { display: none; background: var(--a); color: white; padding: 15px; border-radius: 15px; margin-bottom: 20px; text-align: center; font-weight: bold; cursor: pointer; }
         .status-pill { font-size: 0.65rem; padding: 5px 12px; border-radius: 20px; background: #1a1a1a; color: var(--a); font-weight: bold; margin-bottom: 15px; display: inline-block; border: 1px solid #333; }
+        
+        /* ANILLO Y AGUA */
         .ring-container { position: relative; width: 160px; height: 160px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; }
         .ring-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
         .ring-bg { fill: none; stroke: #1a1a1a; stroke-width: 10; }
         .ring-fill { fill: none; stroke: var(--p); stroke-width: 10; stroke-linecap: round; transition: 0.5s; }
         .ring-info { position: absolute; text-align: center; }
         .ring-info b { font-size: 1.8rem; display: block; line-height: 1; }
-        
         .water-card { background: #0a0a1a; border-radius: 20px; padding: 15px; margin-bottom: 20px; border: 1px solid #1a2a4a; text-align: center; }
         .water-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; margin-top: 10px; }
         .glass { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #222; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; }
         .glass.full { background: var(--water); border-color: var(--water); color: #000; box-shadow: 0 0 8px var(--water); }
         
+        /* COMIDAS Y BOTONES */
         .meal-row { background: var(--card); border-radius: 20px; padding: 18px; margin-bottom: 12px; border: 1px solid #222; }
         .meal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
         .meal-type { color: var(--a); font-weight: 800; font-size: 0.75rem; text-transform: uppercase; }
         .meal-menu { font-size: 0.95rem; color: #fff; display: block; margin-bottom: 10px; line-height: 1.4; }
-        
         .macro-compare { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; background: #000; padding: 10px; border-radius: 12px; border: 1px solid #333; }
         .macro-box { text-align: center; }
         .macro-label { display: block; font-size: 0.55rem; color: #888; text-transform: uppercase; }
@@ -48,34 +52,38 @@
         .days-row { display: flex; overflow-x: auto; gap: 10px; margin-bottom: 20px; padding: 5px 0; scrollbar-width: none; }
         .day-item { min-width: 55px; text-align: center; padding: 10px; border-radius: 15px; background: #111; font-size: 0.75rem; cursor: pointer; border: 1px solid #222; }
         .day-item.active { background: var(--p); color: #fff; border-color: var(--p); }
-        
         .btn-main { background: var(--p); color: white; border: none; padding: 18px; border-radius: 15px; width: 100%; font-weight: 800; cursor: pointer; text-transform: uppercase; }
         .btn-cam { background: var(--gray); color: #fff; border: 1px solid #444; padding: 10px 14px; border-radius: 12px; font-size: 0.7rem; font-weight: bold; cursor: pointer; }
         .btn-cam.done { border-color: var(--p); color: var(--p); background: rgba(46, 160, 67, 0.1); }
         
         input, select { width: 100%; padding: 15px; background: #111; border: 1px solid #333; border-radius: 12px; color: #fff; margin-bottom: 12px; box-sizing: border-box; font-size: 1rem; }
         .hidden { display: none !important; }
-        #log { text-align: center; font-size: 0.7rem; color: var(--yellow); margin-top: 10px; font-weight: bold; min-height: 14px; }
+        #log { text-align: center; font-size: 0.7rem; color: var(--yellow); margin-top: 10px; font-weight: bold; min-height: 20px; padding: 10px; border-radius: 10px; }
+        .log-error { color: var(--red) !important; background: rgba(218, 54, 51, 0.1); }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div id="install-banner" onclick="installApp()">✨ INSTALAR FITAI PRO (CON LOGO)</div>
+    <div id="install-banner" onclick="installApp()">✨ INSTALAR FITAI PRO</div>
+
+    <div class="app-header">
+        <img src="logo.png" class="app-logo" alt="Logo">
+        <h1 class="app-title">FitAI PRO</h1>
+    </div>
 
     <div id="setup" class="hidden">
-        <h2 style="color:var(--p); text-align:center;">FitAI Pro</h2>
         <input type="password" id="key" placeholder="Gemini API Key">
-        <select id="sex"><option value="5">Hombre (+5)</option><option value="-161">Mujer (-161)</option></select>
+        <select id="sex"><option value="5">Hombre</option><option value="-161">Mujer</option></select>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"><input type="number" id="w" placeholder="Peso (kg)"><input type="number" id="h" placeholder="Altura (cm)"></div>
         <input type="number" id="age" placeholder="Edad">
-        <select id="act"><option value="1.2">Sedentario</option><option value="1.375">Ligero</option><option value="1.55" selected>Moderado</option><option value="1.75">Intenso</option></select>
+        <select id="act"><option value="1.2">Sedentario</option><option value="1.55" selected>Moderado</option><option value="1.75">Intenso</option></select>
         <button class="btn-main" onclick="save()">Configurar Perfil</button>
     </div>
 
     <div id="main" class="hidden">
         <div id="mode-indicator" class="status-pill">--</div>
-        <button class="btn-main" style="background:transparent; border:1px solid var(--a); color:var(--a); font-size:0.75rem; padding:12px; margin-bottom:20px;" onclick="document.getElementById('plan-file').click()">📂 SUBIR PLAN NUTRICIONISTA</button>
+        <button class="btn-main" style="background:transparent; border:1px solid var(--a); color:var(--a); font-size:0.75rem; margin-bottom:20px;" onclick="document.getElementById('plan-file').click()">📂 SUBIR PLAN NUTRICIONISTA</button>
         <input type="file" id="plan-file" accept="image/*" class="hidden" onchange="analyzePlan()">
 
         <div class="water-card">
@@ -99,28 +107,27 @@
 </div>
 
 <script>
-    // 1. SISTEMA DE INSTALACIÓN
+    // LÓGICA DE INSTALACIÓN
     let deferredPrompt;
     window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
+        e.preventDefault(); deferredPrompt = e;
         document.getElementById('install-banner').style.display = 'block';
     });
 
     async function installApp() {
         if (deferredPrompt) {
             deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
+            await deferredPrompt.userChoice;
             deferredPrompt = null;
             document.getElementById('install-banner').style.display = 'none';
         }
     }
 
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js').catch(err => console.log("SW Error:", err));
+        navigator.serviceWorker.register('./sw.js').catch(e => console.error(e));
     }
 
-    // 2. VARIABLES Y CARGA
+    // VARIABLES Y PERSISTENCIA
     let k = localStorage.getItem('fit_k'), p = JSON.parse(localStorage.getItem('fit_p')), h = JSON.parse(localStorage.getItem('fit_h')) || [];
     let waterData = JSON.parse(localStorage.getItem('fit_w')) || {}; 
     let myPlan = JSON.parse(localStorage.getItem('fit_plan')) || null;
@@ -129,24 +136,17 @@
 
     window.onload = () => { if(k && p) show(); else document.getElementById('setup').classList.remove('hidden'); };
 
-    // 3. CONFIGURACIÓN INICIAL
     function save() {
         const key = document.getElementById('key').value.trim();
         const w = parseFloat(document.getElementById('w').value), hVal = parseFloat(document.getElementById('h').value), age = parseInt(document.getElementById('age').value);
-        const sex = parseFloat(document.getElementById('sex').value), act = parseFloat(document.getElementById('act').value);
-        if(!key || !w || !hVal || !age) return alert("Faltan datos");
-        const goal = Math.round(((10 * w) + (6.25 * hVal) - (5 * age) + sex) * act - 400);
+        if(!key || !w) return alert("Faltan datos");
+        const goal = Math.round(((10 * w) + (6.25 * hVal) - (5 * age) + 5) * 1.55 - 400);
         localStorage.setItem('fit_k', key); localStorage.setItem('fit_p', JSON.stringify({goalBase: goal}));
         location.reload();
     }
 
-    function show() { 
-        document.getElementById('setup').classList.add('hidden'); 
-        document.getElementById('main').classList.remove('hidden'); 
-        renderCalendar(); update(); 
-    }
+    function show() { document.getElementById('setup').classList.add('hidden'); document.getElementById('main').classList.remove('hidden'); renderCalendar(); update(); }
 
-    // 4. CALENDARIO Y AGUA
     function renderCalendar() {
         const row = document.getElementById('days-row'); row.innerHTML = "";
         const today = new Date();
@@ -165,13 +165,10 @@
         update();
     }
 
-    // 5. ACTUALIZACIÓN DE INTERFAZ (EL CORAZÓN)
     function update() {
         const d = new Date(selectedDateStr);
         const dayNames = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
         const dayName = dayNames[d.getDay()];
-        
-        // Render Agua
         const gls = waterData[selectedDateStr] || 0;
         document.getElementById('liters-count').innerText = `${(gls * 0.25).toFixed(2)} / 4.00 L`;
         const wg = document.getElementById('water-grid'); wg.innerHTML = "";
@@ -180,7 +177,6 @@
         let goal = p.goalBase;
         const list = document.getElementById('meals-list'); list.innerHTML = "";
         
-        // Render Comidas (Modo Plan vs Modo Libre)
         if(myPlan && myPlan[dayName]) {
             goal = myPlan[dayName].reduce((acc, m) => acc + (m.kcal || 0), 0);
             document.getElementById('mode-indicator').innerText = "MODO: PLAN NUTRICIONAL";
@@ -189,8 +185,8 @@
                 list.innerHTML += renderRow(meal, record);
             });
         } else {
-            document.getElementById('mode-indicator').innerText = "MODO: DÉFICIT CALCULADO";
-            list.innerHTML = `<p style="text-align:center; color:#666; font-size:0.8rem; margin-top:30px;">Sube tu dieta para activar el seguimiento.</p>`;
+            document.getElementById('mode-indicator').innerText = "MODO: LIBRE";
+            list.innerHTML = `<p style="text-align:center; color:#666; font-size:0.8rem; margin-top:20px;">Sube tu dieta para comparar macros.</p>`;
         }
 
         const consumed = h.filter(x => x.t === selectedDateStr).reduce((acc, x) => acc + (x.kcal || 0), 0);
@@ -211,23 +207,19 @@
             </div>`;
         }
         return `<div class="meal-row">
-            <div class="meal-header">
-                <span class="meal-type">${meal.tipo}</span>
-                <button class="btn-cam ${record?'done':''}" onclick="cam('${meal.tipo}')">${record?'✓ OK':'📸 ANALIZAR'}</button>
-            </div>
+            <div class="meal-header"><span class="meal-type">${meal.tipo}</span><button class="btn-cam ${record?'done':''}" onclick="cam('${meal.tipo}')">${record?'✓ OK':'📸 ANALIZAR'}</button></div>
             <span class="meal-menu">${meal.menu}</span>
-            <div style="font-size:0.65rem; color:var(--yellow); font-weight:bold; margin-top:5px;">Pauta: ${meal.kcal} kcal | P: ${meal.p}g H: ${meal.c}g G: ${meal.f}g</div>
+            <div style="font-size:0.65rem; color:var(--yellow); font-weight:bold;">Meta: ${meal.kcal} kcal | P:${meal.p}g H:${meal.c}g G:${meal.f}g</div>
             ${stats}
         </div>`;
     }
 
-    // 6. IA GEMINI (CÁMARA Y DIETA)
+    // IA GEMINI CON DIAGNÓSTICO
     function cam(type) { currentMealType = type; document.getElementById('file').click(); }
 
     async function analyzePlan() {
-        const f = document.getElementById('plan-file').files[0];
-        if(!f) return;
-        document.getElementById('log').innerText = "⏳ PROCESANDO DIETA...";
+        const f = document.getElementById('plan-file').files[0]; if(!f) return;
+        setLog("⏳ LEYENDO DIETA...", "yellow");
         const b64 = await toBase64(f);
         try {
             const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${k}`, {
@@ -238,37 +230,45 @@
                 ]}] })
             });
             const d = await res.json();
+            if(d.error) throw new Error(d.error.message);
             myPlan = JSON.parse(d.candidates[0].content.parts[0].text.match(/\{.*\}/s)[0]);
             localStorage.setItem('fit_plan', JSON.stringify(myPlan));
-            document.getElementById('log').innerText = "✅ DIETA CARGADA";
-            update();
-        } catch (e) { document.getElementById('log').innerText = "❌ ERROR AL LEER DIETA"; }
+            setLog("✅ DIETA CARGADA", "p"); update();
+        } catch (e) { setLog("❌ ERROR DIETA: " + e.message, "red"); }
     }
 
     async function runAnalysis() {
-        const f = document.getElementById('file').files[0];
-        if(!f) return;
-        document.getElementById('log').innerText = `⏳ ANALIZANDO...`;
+        const f = document.getElementById('file').files[0]; if(!f) return;
+        setLog(`⏳ ANALIZANDO ${currentMealType}...`, "yellow");
         const b64 = await toBase64(f);
         const dayNames = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
-        const target = myPlan[dayNames[new Date(selectedDateStr).getDay()]].find(m => m.tipo === currentMealType);
+        const target = (myPlan && myPlan[dayNames[new Date(selectedDateStr).getDay()]]) 
+            ? myPlan[dayNames[new Date(selectedDateStr).getDay()]].find(m => m.tipo === currentMealType) 
+            : {tipo: currentMealType, kcal: 500, p:30, c:50, f:15};
 
         try {
             const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${k}`, {
                 method: 'POST', headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ contents: [{ parts: [
-                    { text: `Compara foto con pauta: ${JSON.stringify(target)}. Calcula kcal, p, c, f reales. Devuelve solo JSON: {kcal: num, p: num, c: num, f: num}` },
+                    { text: `Analiza esta comida. Pauta referencia: ${JSON.stringify(target)}. Calcula kcal, p, c, f reales. Devuelve solo JSON: {kcal: num, p: num, c: num, f: num}` },
                     { inline_data: { mime_type: "image/jpeg", data: b64.split(',')[1] } }
                 ]}] })
             });
             const d = await res.json();
+            if(d.error) throw new Error(d.error.message);
             const result = JSON.parse(d.candidates[0].content.parts[0].text.match(/\{.*\}/s)[0]);
             h = h.filter(x => !(x.t === selectedDateStr && x.type === currentMealType));
             h.push({ ...result, t: selectedDateStr, type: currentMealType });
             localStorage.setItem('fit_h', JSON.stringify(h));
-            document.getElementById('log').innerText = "✅ ANALIZADO";
-            update();
-        } catch (e) { document.getElementById('log').innerText = "❌ ERROR"; }
+            setLog("✅ ANALIZADO CON ÉXITO", "p"); update();
+        } catch (e) { setLog("❌ ERROR CÁMARA: " + e.message, "red"); }
+    }
+
+    function setLog(txt, colorVar) {
+        const l = document.getElementById('log');
+        l.innerText = txt;
+        l.className = colorVar === "red" ? "log-error" : "";
+        l.style.color = `var(--${colorVar})`;
     }
 
     const toBase64 = f => new Promise(r => { const rd = new FileReader(); rd.readAsDataURL(f); rd.onload = () => r(rd.result); });
