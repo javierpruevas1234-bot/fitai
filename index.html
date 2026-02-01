@@ -10,7 +10,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href='data:application/manifest+json,{"name":"FitAI Pro","short_name":"FitAI","start_url":"index.html","display":"standalone","background_color":"#000000","theme_color":"#000000","icons":[{"src":"logo.png","sizes":"512x512","type":"image/png"}]}'>
+    
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="apple-touch-icon" href="logo.png">
 
@@ -140,8 +141,7 @@
 
     function update() {
         const dayIdx = new Date(selectedDateStr).getDay();
-        const dayNames = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
-        const dayName = dayNames[dayIdx];
+        const dayName = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"][dayIdx];
         const gls = waterData[selectedDateStr] || 0;
         document.getElementById('liters-count').innerText = `${(gls * 0.25).toFixed(2)} / 4.00 L`;
         const wg = document.getElementById('water-grid'); wg.innerHTML = "";
@@ -219,8 +219,7 @@
         if(!f) return;
         document.getElementById('log').innerText = `⏳ ANALIZANDO ${currentMealType.toUpperCase()}...`;
         const b64 = await toBase64(f);
-        const dayNames = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
-        const dayName = dayNames[new Date(selectedDateStr).getDay()];
+        const dayName = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"][new Date(selectedDateStr).getDay()];
         const target = myPlan[dayName].find(m => m.tipo === currentMealType);
 
         try {
@@ -245,3 +244,4 @@
 </script>
 </body>
 </html>
+      
