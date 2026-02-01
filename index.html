@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -9,10 +9,8 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="apple-touch-icon" href="logo.png">
-
     <link rel="manifest" href='data:application/manifest+json,{"name":"FitAI Pro","short_name":"FitAI","start_url":"index.html","display":"standalone","background_color":"#000000","theme_color":"#000000","icons":[{"src":"logo.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}]}'>
 
     <style>
@@ -20,7 +18,7 @@
         body { font-family: -apple-system, sans-serif; margin: 0; background: var(--bg); color: #fff; display: flex; justify-content: center; min-height: 100vh; overflow-x: hidden; }
         .container { width: 100%; max-width: 430px; padding: 20px; box-sizing: border-box; }
         
-        /* BANNER INSTALACIÓN */
+        /* Botón de instalación dinámico */
         #install-banner { display: none; background: var(--a); color: white; padding: 15px; border-radius: 15px; margin-bottom: 20px; text-align: center; font-weight: bold; cursor: pointer; }
 
         .status-pill { font-size: 0.65rem; padding: 5px 12px; border-radius: 20px; background: #1a1a1a; color: var(--a); font-weight: bold; margin-bottom: 15px; display: inline-block; border: 1px solid #333; }
@@ -63,7 +61,7 @@
 <body>
 
 <div class="container">
-    <div id="install-banner" onclick="installApp()">✨ INSTALAR APP CON LOGO</div>
+    <div id="install-banner" onclick="installApp()">✨ INSTALAR FITAI PRO (CON LOGO)</div>
 
     <div id="setup" class="hidden">
         <h2 style="color:var(--p); text-align:center;">FitAI Pro</h2>
@@ -101,7 +99,7 @@
 </div>
 
 <script>
-    // LÓGICA DE INSTALACIÓN PWA
+    // 1. SISTEMA DE INSTALACIÓN
     let deferredPrompt;
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
@@ -119,10 +117,10 @@
     }
 
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js').catch(err => console.log(err));
+        navigator.serviceWorker.register('./sw.js').catch(err => console.log("SW Error:", err));
     }
 
-    // LÓGICA DE LA APP
+    // 2. VARIABLES Y CARGA
     let k = localStorage.getItem('fit_k'), p = JSON.parse(localStorage.getItem('fit_p')), h = JSON.parse(localStorage.getItem('fit_h')) || [];
     let waterData = JSON.parse(localStorage.getItem('fit_w')) || {}; 
     let myPlan = JSON.parse(localStorage.getItem('fit_plan')) || null;
@@ -131,11 +129,12 @@
 
     window.onload = () => { if(k && p) show(); else document.getElementById('setup').classList.remove('hidden'); };
 
+    // 3. CONFIGURACIÓN INICIAL
     function save() {
         const key = document.getElementById('key').value.trim();
         const w = parseFloat(document.getElementById('w').value), hVal = parseFloat(document.getElementById('h').value), age = parseInt(document.getElementById('age').value);
         const sex = parseFloat(document.getElementById('sex').value), act = parseFloat(document.getElementById('act').value);
-        if(!key || !w || !hVal || !age) return alert("Rellena todos los campos");
+        if(!key || !w || !hVal || !age) return alert("Faltan datos");
         const goal = Math.round(((10 * w) + (6.25 * hVal) - (5 * age) + sex) * act - 400);
         localStorage.setItem('fit_k', key); localStorage.setItem('fit_p', JSON.stringify({goalBase: goal}));
         location.reload();
@@ -147,6 +146,7 @@
         renderCalendar(); update(); 
     }
 
+    // 4. CALENDARIO Y AGUA
     function renderCalendar() {
         const row = document.getElementById('days-row'); row.innerHTML = "";
         const today = new Date();
@@ -165,10 +165,13 @@
         update();
     }
 
+    // 5. ACTUALIZACIÓN DE INTERFAZ (EL CORAZÓN)
     function update() {
         const d = new Date(selectedDateStr);
         const dayNames = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
         const dayName = dayNames[d.getDay()];
+        
+        // Render Agua
         const gls = waterData[selectedDateStr] || 0;
         document.getElementById('liters-count').innerText = `${(gls * 0.25).toFixed(2)} / 4.00 L`;
         const wg = document.getElementById('water-grid'); wg.innerHTML = "";
@@ -177,6 +180,7 @@
         let goal = p.goalBase;
         const list = document.getElementById('meals-list'); list.innerHTML = "";
         
+        // Render Comidas (Modo Plan vs Modo Libre)
         if(myPlan && myPlan[dayName]) {
             goal = myPlan[dayName].reduce((acc, m) => acc + (m.kcal || 0), 0);
             document.getElementById('mode-indicator').innerText = "MODO: PLAN NUTRICIONAL";
@@ -186,7 +190,7 @@
             });
         } else {
             document.getElementById('mode-indicator').innerText = "MODO: DÉFICIT CALCULADO";
-            list.innerHTML = `<p style="text-align:center; color:#666; font-size:0.8rem; margin-top:30px;">Sube tu dieta para ver tus comidas.</p>`;
+            list.innerHTML = `<p style="text-align:center; color:#666; font-size:0.8rem; margin-top:30px;">Sube tu dieta para activar el seguimiento.</p>`;
         }
 
         const consumed = h.filter(x => x.t === selectedDateStr).reduce((acc, x) => acc + (x.kcal || 0), 0);
@@ -217,6 +221,7 @@
         </div>`;
     }
 
+    // 6. IA GEMINI (CÁMARA Y DIETA)
     function cam(type) { currentMealType = type; document.getElementById('file').click(); }
 
     async function analyzePlan() {
@@ -252,7 +257,7 @@
             const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${k}`, {
                 method: 'POST', headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ contents: [{ parts: [
-                    { text: `Compara esta foto con la pauta: ${JSON.stringify(target)}. Calcula kcal, p, c, f reales. Devuelve solo JSON: {kcal: num, p: num, c: num, f: num}` },
+                    { text: `Compara foto con pauta: ${JSON.stringify(target)}. Calcula kcal, p, c, f reales. Devuelve solo JSON: {kcal: num, p: num, c: num, f: num}` },
                     { inline_data: { mime_type: "image/jpeg", data: b64.split(',')[1] } }
                 ]}] })
             });
