@@ -3,70 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FitAI Pro 3.2</title>
+    <title>FitAI Pro</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="mobile-web-app-capable" content="yes">
-    <link rel="apple-touch-icon" href="https://github.com/javierpruevas1234-bot/fitai/blob/main/logo.png">
-    <link rel="manifest" href="data:application/manifest+json,{%22name%22:%22FitAI%20Pro%22,%22short_name%22:%22FitAI%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22#000000%22,%22theme_color%22:%22#000000%22,%22icons%22:[{%22src%22:%22https://github.com/javierpruevas1234-bot/fitai/blob/main/logo.png%22,%22sizes%22:%22512x512%22,%22type%22:%22image/png%22}]}">
+    <link rel="apple-touch-icon" href="https://javierpruevas1234-bot.github.io/fitai/logo.png">
+    <link rel="manifest" href="data:application/manifest+json,{%22name%22:%22FitAI%20Pro%22,%22short_name%22:%22FitAI%22,%22start_url%22:%22index.html%22,%22display%22:%22standalone%22,%22background_color%22:%22#000000%22,%22theme_color%22:%22#000000%22,%22icons%22:[{%22src%22:%22https://javierpruevas1234-bot.github.io/fitai/logo.png%22,%22sizes%22:%22512x512%22,%22type%22:%22image/png%22,%22purpose%22:%22any%20maskable%22}]}">
 
     <style>
         :root { --p: #2ea043; --bg: #000; --card: #121212; --a: #58a6ff; --red: #da3633; --yellow: #d29922; --water: #00d4ff; --gray: #21262d; }
         body { font-family: -apple-system, sans-serif; margin: 0; background: var(--bg); color: #fff; display: flex; justify-content: center; min-height: 100vh; overflow-x: hidden; }
         .container { width: 100%; max-width: 430px; padding: 20px; box-sizing: border-box; }
-        
-        /* STATUS PILL */
         .status-pill { font-size: 0.65rem; padding: 5px 12px; border-radius: 20px; background: #1a1a1a; color: var(--a); font-weight: bold; margin-bottom: 15px; display: inline-block; border: 1px solid #333; }
-
-        /* RINGS */
         .ring-container { position: relative; width: 160px; height: 160px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; }
         .ring-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
         .ring-bg { fill: none; stroke: #1a1a1a; stroke-width: 10; }
         .ring-fill { fill: none; stroke: var(--p); stroke-width: 10; stroke-linecap: round; transition: 0.5s; }
         .ring-info { position: absolute; text-align: center; }
         .ring-info b { font-size: 1.8rem; display: block; line-height: 1; }
-
-        /* WATER */
         .water-card { background: #0a0a1a; border-radius: 20px; padding: 15px; margin-bottom: 20px; border: 1px solid #1a2a4a; text-align: center; }
         .water-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; margin-top: 10px; }
         .glass { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #222; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; }
         .glass.full { background: var(--water); border-color: var(--water); color: #000; box-shadow: 0 0 8px var(--water); }
-
-        /* MEAL ROWS */
         .meal-row { background: var(--card); border-radius: 20px; padding: 18px; margin-bottom: 12px; border: 1px solid #222; }
         .meal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
         .meal-type { color: var(--a); font-weight: 800; font-size: 0.75rem; text-transform: uppercase; }
         .meal-menu { font-size: 0.95rem; color: #fff; display: block; margin-bottom: 10px; line-height: 1.4; }
-
-        /* MACROS BOX */
         .macro-compare { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; background: #000; padding: 10px; border-radius: 12px; border: 1px solid #333; }
         .macro-box { text-align: center; }
         .macro-label { display: block; font-size: 0.55rem; color: #888; text-transform: uppercase; }
         .macro-val { font-weight: 800; font-size: 0.75rem; color: #eee; }
         .diff-badge { font-size: 0.6rem; padding: 2px 5px; border-radius: 4px; font-weight: bold; margin-top: 3px; display: inline-block; }
-
-        /* CALENDAR */
-        .days-row { display: flex; overflow-x: auto; gap: 10px; margin-bottom: 20px; padding: 5px 0; scroll-behavior: smooth; }
+        .days-row { display: flex; overflow-x: auto; gap: 10px; margin-bottom: 20px; padding: 5px 0; }
         .day-item { min-width: 55px; text-align: center; padding: 10px; border-radius: 15px; background: #111; font-size: 0.75rem; cursor: pointer; border: 1px solid #222; }
         .day-item.active { background: var(--p); color: #fff; border-color: var(--p); }
-        
-        /* BUTTONS & INPUTS */
         .btn-main { background: var(--p); color: white; border: none; padding: 18px; border-radius: 15px; width: 100%; font-weight: 800; cursor: pointer; text-transform: uppercase; }
         .btn-cam { background: var(--gray); color: #fff; border: 1px solid #444; padding: 10px 14px; border-radius: 12px; font-size: 0.7rem; font-weight: bold; cursor: pointer; }
         .btn-cam.done { border-color: var(--p); color: var(--p); background: rgba(46, 160, 67, 0.1); }
-        
         input, select { width: 100%; padding: 15px; background: #111; border: 1px solid #333; border-radius: 12px; color: #fff; margin-bottom: 12px; box-sizing: border-box; font-size: 1rem; }
         .hidden { display: none !important; }
-        #log { text-align: center; font-size: 0.7rem; color: var(--yellow); margin-top: 10px; font-weight: bold; height: 14px; }
+        #log { text-align: center; font-size: 0.7rem; color: var(--yellow); margin-top: 10px; font-weight: bold; min-height: 14px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div id="setup" class="hidden">
-        <h2 style="color:var(--p); text-align:center; margin-bottom:5px;">FitAI Pro</h2>
-        <p style="text-align:center; color:#666; font-size:0.8rem; margin-bottom:20px;">Configura tu déficit calórico</p>
+        <h2 style="color:var(--p); text-align:center;">Configuración FitAI</h2>
         <input type="password" id="key" placeholder="Gemini API Key">
         <select id="sex"><option value="5">Hombre (+5)</option><option value="-161">Mujer (-161)</option></select>
         <div style="grid-template-columns: 1fr 1fr; display: grid; gap: 10px;">
@@ -75,17 +58,16 @@
         </div>
         <input type="number" id="age" placeholder="Edad">
         <select id="act">
-            <option value="1.2">Sedentario (x1.2)</option>
-            <option value="1.375">Ligero (x1.375)</option>
-            <option value="1.55" selected>Moderado (x1.55)</option>
-            <option value="1.75">Intenso (x1.75)</option>
+            <option value="1.2">Sedentario</option>
+            <option value="1.375">Ligero (1-3 días)</option>
+            <option value="1.55" selected>Moderado (3-5 días)</option>
+            <option value="1.75">Intenso (6-7 días)</option>
         </select>
         <button class="btn-main" onclick="save()">Configurar Perfil</button>
     </div>
 
     <div id="main" class="hidden">
         <div id="mode-indicator" class="status-pill">--</div>
-        
         <button class="btn-main" style="background:transparent; border:1px solid var(--a); color:var(--a); font-size:0.75rem; padding:12px; margin-bottom:20px;" onclick="document.getElementById('plan-file').click()">📂 SUBIR PLAN NUTRICIONISTA</button>
         <input type="file" id="plan-file" accept="image/*" class="hidden" onchange="analyzePlan()">
 
@@ -104,7 +86,6 @@
 
         <div class="days-row" id="days-row"></div>
         <div id="meals-list"></div>
-
         <div id="log"></div>
         <input type="file" id="file" accept="image/*" capture="camera" class="hidden" onchange="runAnalysis()">
     </div>
@@ -155,8 +136,7 @@
 
     function update() {
         const dayIdx = new Date(selectedDateStr).getDay();
-        const dayNames = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
-        const dayName = dayNames[dayIdx];
+        const dayName = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"][dayIdx];
         
         const gls = waterData[selectedDateStr] || 0;
         document.getElementById('liters-count').innerText = `${(gls * 0.25).toFixed(2)} / 4.00 L`;
@@ -175,7 +155,7 @@
             });
         } else {
             document.getElementById('mode-indicator').innerText = "MODO: DÉFICIT CALCULADO";
-            list.innerHTML = `<p style="text-align:center; color:#666; font-size:0.8rem; margin-top:30px;">Sube una foto de tu dieta para activar el seguimiento estructurado.</p>`;
+            list.innerHTML = `<p style="text-align:center; color:#666; font-size:0.8rem; margin-top:30px;">Sube tu dieta para ver tus comidas estructuradas.</p>`;
         }
 
         const consumed = h.filter(x => x.t === selectedDateStr).reduce((acc, x) => acc + (x.kcal || 0), 0);
@@ -242,7 +222,7 @@
             const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${k}`, {
                 method: 'POST', headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ contents: [{ parts: [
-                    { text: `Compara esta foto con esta pauta: ${JSON.stringify(target)}. Calcula kcal, p, c, f reales del plato de la foto. Devuelve solo JSON: {kcal: num, p: num, c: num, f: num}` },
+                    { text: `Compara esta foto con esta pauta: ${JSON.stringify(target)}. Calcula kcal, p, c, f reales. Devuelve solo JSON: {kcal: num, p: num, c: num, f: num}` },
                     { inline_data: { mime_type: "image/jpeg", data: b64.split(',')[1] } }
                 ]}] })
             });
@@ -259,8 +239,4 @@
     const toBase64 = f => new Promise(r => { const rd = new FileReader(); rd.readAsDataURL(f); rd.onload = () => r(rd.result); });
 </script>
 </body>
-
 </html>
-
-
-
