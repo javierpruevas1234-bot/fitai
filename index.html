@@ -4,88 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>FitAI Pro</title>
-    
-    <meta name="theme-color" content="#000000">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="icon" type="image/png" href="logo.png">
-    <link rel="apple-touch-icon" href="logo.png">
-    <link rel="manifest" href='data:application/manifest+json,{"name":"FitAI Pro","short_name":"FitAI","start_url":"index.html","display":"standalone","background_color":"#000000","theme_color":"#000000","icons":[{"src":"logo.png","sizes":"512x512","type":"image/png"}]}'>
-
     <style>
         :root { --p: #2ea043; --bg: #000; --card: #121212; --a: #58a6ff; --red: #da3633; --yellow: #d29922; --water: #00d4ff; --gray: #21262d; }
-        body { font-family: -apple-system, sans-serif; margin: 0; background: var(--bg); color: #fff; display: flex; justify-content: center; min-height: 100vh; overflow-x: hidden; }
+        body { font-family: -apple-system, sans-serif; margin: 0; background: var(--bg); color: #fff; display: flex; justify-content: center; min-height: 100vh; }
         .container { width: 100%; max-width: 430px; padding: 20px; box-sizing: border-box; }
         .app-header { text-align: center; margin: 10px 0 30px 0; }
         .app-logo { width: 120px; height: 120px; border-radius: 25px; box-shadow: 0 4px 20px rgba(46, 160, 67, 0.4); }
-        #install-banner { display: none; background: var(--a); color: white; padding: 15px; border-radius: 15px; margin-bottom: 20px; text-align: center; font-weight: bold; cursor: pointer; }
         .status-pill { font-size: 0.65rem; padding: 5px 12px; border-radius: 20px; background: #1a1a1a; color: var(--a); font-weight: bold; margin-bottom: 15px; display: inline-block; border: 1px solid #333; }
-        .ring-container { position: relative; width: 160px; height: 160px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; }
-        .ring-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
-        .ring-bg { fill: none; stroke: #1a1a1a; stroke-width: 10; }
-        .ring-fill { fill: none; stroke: var(--p); stroke-width: 10; stroke-linecap: round; transition: 0.5s; }
-        .ring-info { position: absolute; text-align: center; }
-        .ring-info b { font-size: 1.8rem; display: block; line-height: 1; }
         .water-card { background: #0a0a1a; border-radius: 20px; padding: 15px; margin-bottom: 20px; border: 1px solid #1a2a4a; text-align: center; }
         .water-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; margin-top: 10px; }
-        .glass { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #222; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; }
-        .glass.full { background: var(--water); border-color: var(--water); color: #000; box-shadow: 0 0 8px var(--water); }
+        .glass { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #222; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .glass.full { background: var(--water); box-shadow: 0 0 8px var(--water); }
         .meal-row { background: var(--card); border-radius: 20px; padding: 18px; margin-bottom: 12px; border: 1px solid #222; }
         .meal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
         .meal-type { color: var(--a); font-weight: 800; font-size: 0.75rem; text-transform: uppercase; }
-        .meal-menu { font-size: 0.95rem; color: #fff; display: block; margin-bottom: 10px; line-height: 1.4; }
-        .macro-compare { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; background: #000; padding: 10px; border-radius: 12px; border: 1px solid #333; }
-        .macro-box { text-align: center; }
-        .macro-label { display: block; font-size: 0.55rem; color: #888; text-transform: uppercase; }
-        .macro-val { font-weight: 800; font-size: 0.75rem; color: #eee; }
-        .diff-badge { font-size: 0.6rem; padding: 2px 5px; border-radius: 4px; font-weight: bold; margin-top: 3px; display: inline-block; }
-        .days-row { display: flex; overflow-x: auto; gap: 10px; margin-bottom: 20px; padding: 5px 0; scrollbar-width: none; }
-        .day-item { min-width: 55px; text-align: center; padding: 10px; border-radius: 15px; background: #111; font-size: 0.75rem; cursor: pointer; border: 1px solid #222; }
-        .day-item.active { background: var(--p); color: #fff; border-color: var(--p); }
-        .btn-main { background: var(--p); color: white; border: none; padding: 18px; border-radius: 15px; width: 100%; font-weight: 800; cursor: pointer; text-transform: uppercase; }
-        .btn-cam { background: var(--gray); color: #fff; border: 1px solid #444; padding: 10px 14px; border-radius: 12px; font-size: 0.7rem; font-weight: bold; cursor: pointer; }
-        .btn-cam.done { border-color: var(--p); color: var(--p); background: rgba(46, 160, 67, 0.1); }
-        input, select { width: 100%; padding: 15px; background: #111; border: 1px solid #333; border-radius: 12px; color: #fff; margin-bottom: 12px; box-sizing: border-box; font-size: 1rem; }
+        .btn-main { background: var(--p); color: white; border: none; padding: 18px; border-radius: 15px; width: 100%; font-weight: 800; cursor: pointer; }
+        .btn-cam { background: var(--gray); color: #fff; border: 1px solid #444; padding: 10px 14px; border-radius: 12px; font-size: 0.7rem; cursor: pointer; }
+        .btn-cam.done { border-color: var(--p); color: var(--p); }
+        input, select { width: 100%; padding: 15px; background: #111; border: 1px solid #333; border-radius: 12px; color: #fff; margin-bottom: 12px; }
         .hidden { display: none !important; }
-        #log { text-align: center; font-size: 0.7rem; color: var(--yellow); margin-top: 10px; font-weight: bold; min-height: 20px; padding: 10px; border-radius: 10px; }
-        .log-error { color: var(--red) !important; background: rgba(218, 54, 51, 0.1); }
+        #log { text-align: center; font-size: 0.7rem; color: var(--yellow); padding: 10px; }
+        .macro-compare { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; background: #000; padding: 10px; border-radius: 12px; }
+        .macro-val { font-weight: 800; font-size: 0.75rem; display: block; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div id="install-banner" onclick="installApp()">✨ INSTALAR APP</div>
-    <div class="app-header"><img src="logo.png" class="app-logo" alt="Logo"></div>
+    <div class="app-header"><img src="logo.png" class="app-logo"></div>
 
     <div id="setup" class="hidden">
         <input type="password" id="key" placeholder="Gemini API Key">
-        <select id="sex"><option value="5">Hombre</option><option value="-161">Mujer</option></select>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"><input type="number" id="w" placeholder="Peso (kg)"><input type="number" id="h" placeholder="Altura (cm)"></div>
-        <input type="number" id="age" placeholder="Edad">
-        <select id="act"><option value="1.2">Sedentario</option><option value="1.55" selected>Moderado</option><option value="1.75">Intenso</option></select>
-        <button class="btn-main" onclick="save()">Configurar y Empezar</button>
+        <input type="number" id="w" placeholder="Peso (kg)">
+        <button class="btn-main" onclick="save()">Empezar</button>
     </div>
 
     <div id="main" class="hidden">
-        <div id="mode-indicator" class="status-pill">--</div>
-        <button class="btn-main" style="background:transparent; border:1px solid var(--a); color:var(--a); font-size:0.75rem; margin-bottom:20px;" onclick="document.getElementById('plan-file').click()">📂 SUBIR PLAN NUTRICIONISTA</button>
+        <div id="mode-indicator" class="status-pill">MODO LIBRE</div>
+        <button class="btn-main" style="background:transparent; border:1px solid var(--a); color:var(--a); margin-bottom:20px;" onclick="document.getElementById('plan-file').click()">📂 SUBIR PLAN NUTRICIONISTA</button>
         <input type="file" id="plan-file" accept="image/*" class="hidden" onchange="analyzePlan()">
 
-        <div class="water-card">
-            <div style="display: flex; justify-content: space-between; align-items: baseline;">
-                <span style="font-size: 10px; color: var(--water); font-weight: bold;">AGUA (4L)</span>
-                <span style="font-size: 14px; font-weight: 900;" id="liters-count">0 / 4 L</span>
-            </div>
-            <div class="water-grid" id="water-grid"></div>
-        </div>
-
-        <div class="ring-container">
-            <svg class="ring-svg"><circle class="ring-bg" cx="80" cy="80" r="72"></circle><circle id="ring-progress" class="ring-fill" cx="80" cy="80" r="72" stroke-dasharray="452" stroke-dashoffset="452"></circle></svg>
-            <div class="ring-info"><span style="font-size:0.6rem; color:#888;">RESTANTES</span><b id="v-rest">0</b><span id="target-label" style="font-size:0.55rem; color:var(--p); font-weight:bold;"></span></div>
-        </div>
-
-        <div class="days-row" id="days-row"></div>
+        <div class="water-card" id="water-section"></div>
         <div id="meals-list"></div>
         <div id="log"></div>
         <input type="file" id="file" accept="image/*" capture="camera" class="hidden" onchange="runAnalysis()">
@@ -93,161 +52,99 @@
 </div>
 
 <script>
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault(); deferredPrompt = e;
-        document.getElementById('install-banner').style.display = 'block';
-    });
-    async function installApp() {
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-            await deferredPrompt.userChoice;
-            deferredPrompt = null;
-            document.getElementById('install-banner').style.display = 'none';
-        }
-    }
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js').catch(e => console.error(e));
-    }
-
     let k = localStorage.getItem('fit_k'), p = JSON.parse(localStorage.getItem('fit_p')), h = JSON.parse(localStorage.getItem('fit_h')) || [];
-    let waterData = JSON.parse(localStorage.getItem('fit_w')) || {}; 
     let myPlan = JSON.parse(localStorage.getItem('fit_plan')) || null;
-    let selectedDateStr = new Date().toDateString();
-    let currentMealType = "";
+    let currentType = "";
 
     window.onload = () => { if(k && p) show(); else document.getElementById('setup').classList.remove('hidden'); };
 
     function save() {
-        const key = document.getElementById('key').value.trim();
-        const w = parseFloat(document.getElementById('w').value), hVal = parseFloat(document.getElementById('h').value), age = parseInt(document.getElementById('age').value);
-        if(!key || !w) return alert("Faltan datos");
-        const goal = Math.round(((10 * w) + (6.25 * hVal) - (5 * age) + 5) * 1.55 - 400);
-        localStorage.setItem('fit_k', key); localStorage.setItem('fit_p', JSON.stringify({goalBase: goal}));
+        const key = document.getElementById('key').value;
+        const w = document.getElementById('w').value;
+        if(!key || !w) return;
+        localStorage.setItem('fit_k', key);
+        localStorage.setItem('fit_p', JSON.stringify({w}));
         location.reload();
     }
 
-    function show() { document.getElementById('setup').classList.add('hidden'); document.getElementById('main').classList.remove('hidden'); renderCalendar(); update(); }
-
-    function renderCalendar() {
-        const row = document.getElementById('days-row'); row.innerHTML = "";
-        const today = new Date();
-        for(let i = -3; i <= 3; i++) {
-            let d = new Date(); d.setDate(today.getDate() + i);
-            row.innerHTML += `<div class="day-item ${d.toDateString() === selectedDateStr ? 'active' : ''}" onclick="setDate('${d.toDateString()}')">
-                <span>${['Dom','Lun','Mar','Mie','Jue','Vie','Sab'][d.getDay()]}</span><br><b>${d.getDate()}</b></div>`;
-        }
-    }
-
-    function setDate(d) { selectedDateStr = d; renderCalendar(); update(); }
-    function toggleWater(i) {
-        waterData[selectedDateStr] = (waterData[selectedDateStr] === i + 1) ? i : i + 1;
-        localStorage.setItem('fit_w', JSON.stringify(waterData));
+    function show() {
+        document.getElementById('setup').classList.add('hidden');
+        document.getElementById('main').classList.remove('hidden');
         update();
     }
 
     function update() {
-        const d = new Date(selectedDateStr);
         const dayNames = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
-        const dayName = dayNames[d.getDay()];
-        const gls = waterData[selectedDateStr] || 0;
-        document.getElementById('liters-count').innerText = `${(gls * 0.25).toFixed(2)} / 4.00 L`;
-        const wg = document.getElementById('water-grid'); wg.innerHTML = "";
-        for(let i=0; i<16; i++) wg.innerHTML += `<div class="glass ${i < gls ? 'full' : ''}" onclick="toggleWater(${i})">💧</div>`;
-        let goal = p.goalBase;
-        const list = document.getElementById('meals-list'); list.innerHTML = "";
+        const dayName = dayNames[new Date().getDay()];
+        const list = document.getElementById('meals-list'); 
+        list.innerHTML = "";
+        
         if(myPlan && myPlan[dayName]) {
-            goal = myPlan[dayName].reduce((acc, m) => acc + (m.kcal || 0), 0);
-            document.getElementById('mode-indicator').innerText = "PLAN NUTRICIONAL ACTIVO";
-            myPlan[dayName].forEach(meal => {
-                const record = h.find(x => x.t === selectedDateStr && x.type === meal.tipo);
-                list.innerHTML += renderRow(meal, record);
+            document.getElementById('mode-indicator').innerText = "PLAN ACTIVO: " + dayName.toUpperCase();
+            myPlan[dayName].forEach(m => {
+                const rec = h.find(x => x.type === m.tipo && x.date === new Date().toDateString());
+                list.innerHTML += `<div class="meal-row">
+                    <div class="meal-header"><span class="meal-type">${m.tipo}</span>
+                    <button class="btn-cam ${rec?'done':''}" onclick="cam('${m.tipo}')">${rec?'✓':'📸'}</button></div>
+                    <div style="font-size:0.9rem;">${m.menu}</div>
+                    ${rec ? `<div class="macro-compare">
+                        <div style="text-align:center"><span style="font-size:0.6rem">KCAL</span><span class="macro-val">${rec.kcal}</span></div>
+                        <div style="text-align:center"><span style="font-size:0.6rem">P</span><span class="macro-val">${rec.p}g</span></div>
+                        <div style="text-align:center"><span style="font-size:0.6rem">H</span><span class="macro-val">${rec.c}g</span></div>
+                        <div style="text-align:center"><span style="font-size:0.6rem">G</span><span class="macro-val">${rec.f}g</span></div>
+                    </div>` : ''}
+                </div>`;
             });
-        } else {
-            document.getElementById('mode-indicator').innerText = "MODO LIBRE";
-            list.innerHTML = `<p style="text-align:center; color:#666; font-size:0.8rem; margin-top:20px;">Sube tu dieta para comparar.</p>`;
         }
-        const consumed = h.filter(x => x.t === selectedDateStr).reduce((acc, x) => acc + (x.kcal || 0), 0);
-        document.getElementById('target-label').innerText = `META: ${goal} KCAL`;
-        document.getElementById('v-rest').innerText = Math.max(0, goal - consumed);
-        document.getElementById('ring-progress').style.strokeDashoffset = 452 - (Math.min(consumed/goal, 1) * 452);
     }
 
-    function renderRow(meal, record) {
-        let stats = "";
-        if(record) {
-            const diff = (((record.kcal - meal.kcal) / meal.kcal) * 100).toFixed(0);
-            stats = `<div class="macro-compare">
-                <div class="macro-box"><span class="macro-label">Kcal</span><span class="macro-val">${record.kcal}</span><br><span class="diff-badge" style="background:${Math.abs(diff) < 15 ? 'var(--p)' : 'var(--red)'}">${diff > 0 ? '+' : ''}${diff}%</span></div>
-                <div class="macro-box"><span class="macro-label">Prot</span><span class="macro-val">${record.p}g</span></div>
-                <div class="macro-box"><span class="macro-label">HC</span><span class="macro-val">${record.c}g</span></div>
-                <div class="macro-box"><span class="macro-label">Gr</span><span class="macro-val">${record.f}g</span></div>
-            </div>`;
-        }
-        return `<div class="meal-row">
-            <div class="meal-header"><span class="meal-type">${meal.tipo}</span><button class="btn-cam ${record?'done':''}" onclick="cam('${meal.tipo}')">${record?'✓ OK':'📸 ANALIZAR'}</button></div>
-            <span class="meal-menu">${meal.menu}</span>
-            <div style="font-size:0.65rem; color:var(--yellow); font-weight:bold;">Meta: ${meal.kcal} kcal | P:${meal.p}g H:${meal.c}g G:${meal.f}g</div>
-            ${stats}
-        </div>`;
-    }
-
-    function cam(type) { currentMealType = type; document.getElementById('file').click(); }
+    function cam(type) { currentType = type; document.getElementById('file').click(); }
 
     async function analyzePlan() {
-        const f = document.getElementById('plan-file').files[0]; if(!f) return;
-        setLog("⏳ LEYENDO DIETA...", "yellow");
-        const b64 = await toBase64(f);
+        const file = document.getElementById('plan-file').files[0];
+        const b64 = await toBase64(file);
+        document.getElementById('log').innerText = "⏳ Leyendo plan nutricional...";
+        
         try {
-            // ACTUALIZADO A GEMINI 2.0 FLASH
             const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${k}`, {
-                method: 'POST', headers: {'Content-Type': 'application/json'},
+                method: 'POST',
                 body: JSON.stringify({ contents: [{ parts: [
-                    { text: "Extrae la dieta en JSON (lunes a domingo). Formato: {'lunes':[{tipo:'Desayuno', menu:'...', kcal:num, p:num, c:num, f:num},...], ...}. Solo JSON." },
+                    { text: "Extrae la dieta en JSON. Formato: {'lunes':[{tipo:'Desayuno', menu:'...', kcal:0, p:0, c:0, f:0}], 'martes':...}. Solo JSON puro." },
                     { inline_data: { mime_type: "image/jpeg", data: b64.split(',')[1] } }
                 ]}] })
             });
-            const d = await res.json();
-            if(d.error) throw new Error(d.error.message);
-            myPlan = JSON.parse(d.candidates[0].content.parts[0].text.match(/\{.*\}/s)[0]);
+            const data = await res.json();
+            const text = data.candidates[0].content.parts[0].text;
+            myPlan = JSON.parse(text.match(/\{.*\}/s)[0]);
             localStorage.setItem('fit_plan', JSON.stringify(myPlan));
-            setLog("✅ DIETA CARGADA", "p"); update();
-        } catch (e) { setLog("❌ ERROR: " + e.message, "red"); }
+            document.getElementById('log').innerText = "✅ Plan cargado.";
+            update();
+        } catch (e) { document.getElementById('log').innerText = "❌ Error al leer plan."; }
     }
 
     async function runAnalysis() {
-        const f = document.getElementById('file').files[0]; if(!f) return;
-        setLog(`⏳ ANALIZANDO ${currentMealType}...`, "yellow");
-        const b64 = await toBase64(f);
-        const dayNames = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
-        const target = (myPlan && myPlan[dayNames[new Date(selectedDateStr).getDay()]]) 
-            ? myPlan[dayNames[new Date(selectedDateStr).getDay()]].find(m => m.tipo === currentMealType) 
-            : {tipo: currentMealType, kcal: 500, p:30, c:50, f:15};
+        const file = document.getElementById('file').files[0];
+        const b64 = await toBase64(file);
+        document.getElementById('log').innerText = "⏳ Analizando plato...";
+        
         try {
-            // ACTUALIZADO A GEMINI 2.0 FLASH
             const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${k}`, {
-                method: 'POST', headers: {'Content-Type': 'application/json'},
+                method: 'POST',
                 body: JSON.stringify({ contents: [{ parts: [
-                    { text: `Analiza foto. Referencia: ${JSON.stringify(target)}. Calcula kcal, p, c, f reales. Solo JSON: {kcal: num, p: num, c: num, f: num}` },
+                    { text: "Analiza esta comida. Devuelve SOLO un objeto JSON con campos: kcal (numero), p (proteinas), c (carbohidratos), f (grasas). Nada de texto adicional." },
                     { inline_data: { mime_type: "image/jpeg", data: b64.split(',')[1] } }
                 ]}] })
             });
-            const d = await res.json();
-            if(d.error) throw new Error(d.error.message);
-            const result = JSON.parse(d.candidates[0].content.parts[0].text.match(/\{.*\}/s)[0]);
-            h = h.filter(x => !(x.t === selectedDateStr && x.type === currentMealType));
-            h.push({ ...result, t: selectedDateStr, type: currentMealType });
+            const data = await res.json();
+            const result = JSON.parse(data.candidates[0].content.parts[0].text.match(/\{.*\}/s)[0]);
+            
+            h.push({ ...result, type: currentType, date: new Date().toDateString() });
             localStorage.setItem('fit_h', JSON.stringify(h));
-            setLog("✅ ANALIZADO", "p"); update();
-        } catch (e) { setLog("❌ ERROR: " + e.message, "red"); }
+            document.getElementById('log').innerText = "✅ Analizado con éxito.";
+            update();
+        } catch (e) { document.getElementById('log').innerText = "❌ Error en análisis."; }
     }
 
-    function setLog(txt, colorVar) {
-        const l = document.getElementById('log');
-        l.innerText = txt;
-        l.className = colorVar === "red" ? "log-error" : "";
-        l.style.color = `var(--${colorVar})`;
-    }
     const toBase64 = f => new Promise(r => { const rd = new FileReader(); rd.readAsDataURL(f); rd.onload = () => r(rd.result); });
 </script>
 </body>
