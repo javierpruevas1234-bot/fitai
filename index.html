@@ -1,151 +1,37 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FitAI Pro</title>
-    <style>
-        :root { --p: #2ea043; --bg: #000; --card: #121212; --a: #58a6ff; --red: #da3633; --yellow: #d29922; --water: #00d4ff; --gray: #21262d; }
-        body { font-family: -apple-system, sans-serif; margin: 0; background: var(--bg); color: #fff; display: flex; justify-content: center; min-height: 100vh; }
-        .container { width: 100%; max-width: 430px; padding: 20px; box-sizing: border-box; }
-        .app-header { text-align: center; margin: 10px 0 30px 0; }
-        .app-logo { width: 120px; height: 120px; border-radius: 25px; box-shadow: 0 4px 20px rgba(46, 160, 67, 0.4); }
-        .status-pill { font-size: 0.65rem; padding: 5px 12px; border-radius: 20px; background: #1a1a1a; color: var(--a); font-weight: bold; margin-bottom: 15px; display: inline-block; border: 1px solid #333; }
-        .water-card { background: #0a0a1a; border-radius: 20px; padding: 15px; margin-bottom: 20px; border: 1px solid #1a2a4a; text-align: center; }
-        .water-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; margin-top: 10px; }
-        .glass { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #222; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .glass.full { background: var(--water); box-shadow: 0 0 8px var(--water); }
-        .meal-row { background: var(--card); border-radius: 20px; padding: 18px; margin-bottom: 12px; border: 1px solid #222; }
-        .meal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
-        .meal-type { color: var(--a); font-weight: 800; font-size: 0.75rem; text-transform: uppercase; }
-        .btn-main { background: var(--p); color: white; border: none; padding: 18px; border-radius: 15px; width: 100%; font-weight: 800; cursor: pointer; }
-        .btn-cam { background: var(--gray); color: #fff; border: 1px solid #444; padding: 10px 14px; border-radius: 12px; font-size: 0.7rem; cursor: pointer; }
-        .btn-cam.done { border-color: var(--p); color: var(--p); }
-        input, select { width: 100%; padding: 15px; background: #111; border: 1px solid #333; border-radius: 12px; color: #fff; margin-bottom: 12px; }
-        .hidden { display: none !important; }
-        #log { text-align: center; font-size: 0.7rem; color: var(--yellow); padding: 10px; }
-        .macro-compare { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; background: #000; padding: 10px; border-radius: 12px; }
-        .macro-val { font-weight: 800; font-size: 0.75rem; display: block; }
-    </style>
-</head>
-<body>
+async function analyzePlan() {
+    const f = document.getElementById('plan-file').files[0]; 
+    if(!f) return;
+    
+    setLog("⏳ LEYENDO DIETA...", "yellow");
+    const b64 = await toBase64(f);
+    
+    try {
+        // Usamos gemini-2.0-flash que es la versión estable para tu cuenta
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${k}`, {
+            method: 'POST', 
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ 
+                contents: [{ 
+                    parts: [
+                        { text: "Extrae la dieta en JSON (lunes a domingo). Formato: {'lunes':[{tipo:'Desayuno', menu:'...', kcal:num, p:num, c:num, f:num},...], ...}. Solo JSON puro." },
+                        { inline_data: { mime_type: "image/jpeg", data: b64.split(',')[1] } }
+                    ]
+                }] 
+            })
+        });
 
-<div class="container">
-    <div class="app-header"><img src="logo.png" class="app-logo"></div>
+        const d = await res.json();
+        if(d.error) throw new Error(d.error.message);
 
-    <div id="setup" class="hidden">
-        <input type="password" id="key" placeholder="Gemini API Key">
-        <input type="number" id="w" placeholder="Peso (kg)">
-        <button class="btn-main" onclick="save()">Empezar</button>
-    </div>
-
-    <div id="main" class="hidden">
-        <div id="mode-indicator" class="status-pill">MODO LIBRE</div>
-        <button class="btn-main" style="background:transparent; border:1px solid var(--a); color:var(--a); margin-bottom:20px;" onclick="document.getElementById('plan-file').click()">📂 SUBIR PLAN NUTRICIONISTA</button>
-        <input type="file" id="plan-file" accept="image/*" class="hidden" onchange="analyzePlan()">
-
-        <div class="water-card" id="water-section"></div>
-        <div id="meals-list"></div>
-        <div id="log"></div>
-        <input type="file" id="file" accept="image/*" capture="camera" class="hidden" onchange="runAnalysis()">
-    </div>
-</div>
-
-<script>
-    let k = localStorage.getItem('fit_k'), p = JSON.parse(localStorage.getItem('fit_p')), h = JSON.parse(localStorage.getItem('fit_h')) || [];
-    let myPlan = JSON.parse(localStorage.getItem('fit_plan')) || null;
-    let currentType = "";
-
-    window.onload = () => { if(k && p) show(); else document.getElementById('setup').classList.remove('hidden'); };
-
-    function save() {
-        const key = document.getElementById('key').value;
-        const w = document.getElementById('w').value;
-        if(!key || !w) return;
-        localStorage.setItem('fit_k', key);
-        localStorage.setItem('fit_p', JSON.stringify({w}));
-        location.reload();
-    }
-
-    function show() {
-        document.getElementById('setup').classList.add('hidden');
-        document.getElementById('main').classList.remove('hidden');
+        // Esta es la parte clave: extrae el JSON aunque haya texto alrededor
+        const rawText = d.candidates[0].content.parts[0].text;
+        myPlan = JSON.parse(rawText.match(/\{.*\}/s)[0]);
+        
+        localStorage.setItem('fit_plan', JSON.stringify(myPlan));
+        setLog("✅ DIETA CARGADA", "p"); 
         update();
-    }
-
-    function update() {
-        const dayNames = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
-        const dayName = dayNames[new Date().getDay()];
-        const list = document.getElementById('meals-list'); 
-        list.innerHTML = "";
         
-        if(myPlan && myPlan[dayName]) {
-            document.getElementById('mode-indicator').innerText = "PLAN ACTIVO: " + dayName.toUpperCase();
-            myPlan[dayName].forEach(m => {
-                const rec = h.find(x => x.type === m.tipo && x.date === new Date().toDateString());
-                list.innerHTML += `<div class="meal-row">
-                    <div class="meal-header"><span class="meal-type">${m.tipo}</span>
-                    <button class="btn-cam ${rec?'done':''}" onclick="cam('${m.tipo}')">${rec?'✓':'📸'}</button></div>
-                    <div style="font-size:0.9rem;">${m.menu}</div>
-                    ${rec ? `<div class="macro-compare">
-                        <div style="text-align:center"><span style="font-size:0.6rem">KCAL</span><span class="macro-val">${rec.kcal}</span></div>
-                        <div style="text-align:center"><span style="font-size:0.6rem">P</span><span class="macro-val">${rec.p}g</span></div>
-                        <div style="text-align:center"><span style="font-size:0.6rem">H</span><span class="macro-val">${rec.c}g</span></div>
-                        <div style="text-align:center"><span style="font-size:0.6rem">G</span><span class="macro-val">${rec.f}g</span></div>
-                    </div>` : ''}
-                </div>`;
-            });
-        }
+    } catch (e) { 
+        setLog("❌ ERROR: " + e.message, "red"); 
     }
-
-    function cam(type) { currentType = type; document.getElementById('file').click(); }
-
-    async function analyzePlan() {
-        const file = document.getElementById('plan-file').files[0];
-        const b64 = await toBase64(file);
-        document.getElementById('log').innerText = "⏳ Leyendo plan nutricional...";
-        
-        try {
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${k}`, {
-                method: 'POST',
-                body: JSON.stringify({ contents: [{ parts: [
-                    { text: "Extrae la dieta en JSON. Formato: {'lunes':[{tipo:'Desayuno', menu:'...', kcal:0, p:0, c:0, f:0}], 'martes':...}. Solo JSON puro." },
-                    { inline_data: { mime_type: "image/jpeg", data: b64.split(',')[1] } }
-                ]}] })
-            });
-            const data = await res.json();
-            const text = data.candidates[0].content.parts[0].text;
-            myPlan = JSON.parse(text.match(/\{.*\}/s)[0]);
-            localStorage.setItem('fit_plan', JSON.stringify(myPlan));
-            document.getElementById('log').innerText = "✅ Plan cargado.";
-            update();
-        } catch (e) { document.getElementById('log').innerText = "❌ Error al leer plan."; }
-    }
-
-    async function runAnalysis() {
-        const file = document.getElementById('file').files[0];
-        const b64 = await toBase64(file);
-        document.getElementById('log').innerText = "⏳ Analizando plato...";
-        
-        try {
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${k}`, {
-                method: 'POST',
-                body: JSON.stringify({ contents: [{ parts: [
-                    { text: "Analiza esta comida. Devuelve SOLO un objeto JSON con campos: kcal (numero), p (proteinas), c (carbohidratos), f (grasas). Nada de texto adicional." },
-                    { inline_data: { mime_type: "image/jpeg", data: b64.split(',')[1] } }
-                ]}] })
-            });
-            const data = await res.json();
-            const result = JSON.parse(data.candidates[0].content.parts[0].text.match(/\{.*\}/s)[0]);
-            
-            h.push({ ...result, type: currentType, date: new Date().toDateString() });
-            localStorage.setItem('fit_h', JSON.stringify(h));
-            document.getElementById('log').innerText = "✅ Analizado con éxito.";
-            update();
-        } catch (e) { document.getElementById('log').innerText = "❌ Error en análisis."; }
-    }
-
-    const toBase64 = f => new Promise(r => { const rd = new FileReader(); rd.readAsDataURL(f); rd.onload = () => r(rd.result); });
-</script>
-</body>
-</html>
+}
