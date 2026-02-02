@@ -4,13 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>FitAI Pro</title>
-    
     <style>
         :root { --p: #2ea043; --bg: #000; --card: #121212; --a: #58a6ff; --red: #da3633; --yellow: #d29922; --water: #00d4ff; --gray: #21262d; }
         body { font-family: -apple-system, sans-serif; margin: 0; background: var(--bg); color: #fff; display: flex; justify-content: center; min-height: 100vh; overflow-x: hidden; }
         .container { width: 100%; max-width: 430px; padding: 20px; box-sizing: border-box; }
         .app-header { text-align: center; margin: 10px 0 30px 0; }
-        .app-logo { width: 120px; height: 120px; border-radius: 25px; box-shadow: 0 4px 20px rgba(46, 160, 67, 0.4); }
+        .app-logo { width: 100px; height: 100px; border-radius: 20px; box-shadow: 0 4px 15px rgba(46, 160, 67, 0.3); }
         .status-pill { font-size: 0.65rem; padding: 5px 12px; border-radius: 20px; background: #1a1a1a; color: var(--a); font-weight: bold; margin-bottom: 15px; display: inline-block; border: 1px solid #333; }
         .ring-container { position: relative; width: 160px; height: 160px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; }
         .ring-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
@@ -21,43 +20,39 @@
         .water-card { background: #0a0a1a; border-radius: 20px; padding: 15px; margin-bottom: 20px; border: 1px solid #1a2a4a; text-align: center; }
         .water-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; margin-top: 10px; }
         .glass { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #222; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; }
-        .glass.full { background: var(--water); border-color: var(--water); color: #000; box-shadow: 0 0 8px var(--water); }
+        .glass.full { background: var(--water); border-color: var(--water); color: #000; }
         .meal-row { background: var(--card); border-radius: 20px; padding: 18px; margin-bottom: 12px; border: 1px solid #222; }
         .meal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
         .meal-type { color: var(--a); font-weight: 800; font-size: 0.75rem; text-transform: uppercase; }
-        .meal-menu { font-size: 0.95rem; color: #fff; display: block; margin-bottom: 10px; line-height: 1.4; }
         .macro-compare { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; background: #000; padding: 10px; border-radius: 12px; border: 1px solid #333; }
         .macro-box { text-align: center; }
-        .macro-label { display: block; font-size: 0.55rem; color: #888; text-transform: uppercase; }
+        .macro-label { display: block; font-size: 0.55rem; color: #888; }
         .macro-val { font-weight: 800; font-size: 0.75rem; color: #eee; }
-        .diff-badge { font-size: 0.6rem; padding: 2px 5px; border-radius: 4px; font-weight: bold; margin-top: 3px; display: inline-block; }
-        .days-row { display: flex; overflow-x: auto; gap: 10px; margin-bottom: 20px; padding: 5px 0; scrollbar-width: none; }
+        .days-row { display: flex; overflow-x: auto; gap: 10px; margin-bottom: 20px; padding: 5px 0; }
         .day-item { min-width: 55px; text-align: center; padding: 10px; border-radius: 15px; background: #111; font-size: 0.75rem; cursor: pointer; border: 1px solid #222; }
-        .day-item.active { background: var(--p); color: #fff; border-color: var(--p); }
-        .btn-main { background: var(--p); color: white; border: none; padding: 18px; border-radius: 15px; width: 100%; font-weight: 800; cursor: pointer; text-transform: uppercase; }
-        .btn-cam { background: var(--gray); color: #fff; border: 1px solid #444; padding: 10px 14px; border-radius: 12px; font-size: 0.7rem; font-weight: bold; cursor: pointer; }
-        .btn-cam.done { border-color: var(--p); color: var(--p); background: rgba(46, 160, 67, 0.1); }
-        input, select { width: 100%; padding: 15px; background: #111; border: 1px solid #333; border-radius: 12px; color: #fff; margin-bottom: 12px; box-sizing: border-box; font-size: 1rem; }
+        .day-item.active { background: var(--p); border-color: var(--p); }
+        .btn-main { background: var(--p); color: white; border: none; padding: 18px; border-radius: 15px; width: 100%; font-weight: 800; cursor: pointer; }
+        .btn-cam { background: var(--gray); color: #fff; border: 1px solid #444; padding: 10px 14px; border-radius: 12px; font-size: 0.7rem; cursor: pointer; }
+        .btn-cam.done { border-color: var(--p); color: var(--p); }
+        input { width: 100%; padding: 15px; background: #111; border: 1px solid #333; border-radius: 12px; color: #fff; margin-bottom: 12px; box-sizing: border-box; }
         .hidden { display: none !important; }
-        #log { text-align: center; font-size: 0.7rem; color: var(--yellow); margin-top: 10px; font-weight: bold; min-height: 20px; padding: 10px; border-radius: 10px; }
-        .log-error { color: var(--red) !important; background: rgba(218, 54, 51, 0.1); }
+        #log { text-align: center; font-size: 0.75rem; margin-top: 10px; font-weight: bold; min-height: 20px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="app-header"><img src="logo.png" class="app-logo" alt="Logo"></div>
+    <div class="app-header"><img src="logo.png" class="app-logo"></div>
 
     <div id="setup" class="hidden">
         <input type="password" id="key" placeholder="Gemini API Key">
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"><input type="number" id="w" placeholder="Peso (kg)"><input type="number" id="h" placeholder="Altura (cm)"></div>
-        <input type="number" id="age" placeholder="Edad">
-        <button class="btn-main" onclick="save()">Configurar y Empezar</button>
+        <input type="number" id="w" placeholder="Tu peso (kg)">
+        <button class="btn-main" onclick="save()">Empezar FitAI Pro</button>
     </div>
 
     <div id="main" class="hidden">
         <div id="mode-indicator" class="status-pill">--</div>
-        <button class="btn-main" style="background:transparent; border:1px solid var(--a); color:var(--a); font-size:0.75rem; margin-bottom:20px;" onclick="document.getElementById('plan-file').click()">📂 SUBIR PLAN NUTRICIONISTA</button>
+        <button class="btn-main" style="background:transparent; border:1px solid var(--a); color:var(--a); margin-bottom:20px;" onclick="document.getElementById('plan-file').click()">📂 SUBIR PLAN NUTRICIONISTA</button>
         <input type="file" id="plan-file" accept="image/*" class="hidden" onchange="analyzePlan()">
 
         <div class="water-card">
@@ -85,15 +80,16 @@
     let waterData = JSON.parse(localStorage.getItem('fit_w')) || {}; 
     let myPlan = JSON.parse(localStorage.getItem('fit_plan')) || null;
     let selectedDateStr = new Date().toDateString();
-    let currentMealType = "";
+    let currentType = "";
 
     window.onload = () => { if(k && p) show(); else document.getElementById('setup').classList.remove('hidden'); };
 
     function save() {
         const key = document.getElementById('key').value.trim();
-        const w = parseFloat(document.getElementById('w').value);
+        const w = document.getElementById('w').value;
         if(!key || !w) return alert("Faltan datos");
-        localStorage.setItem('fit_k', key); localStorage.setItem('fit_p', JSON.stringify({goalBase: 2000}));
+        localStorage.setItem('fit_k', key);
+        localStorage.setItem('fit_p', JSON.stringify({goalBase: 2000, w}));
         location.reload();
     }
 
@@ -134,11 +130,21 @@
             document.getElementById('mode-indicator').innerText = "PLAN ACTIVO: " + dayName.toUpperCase();
             myPlan[dayName].forEach(meal => {
                 const record = h.find(x => x.t === selectedDateStr && x.type === meal.tipo);
-                list.innerHTML += renderRow(meal, record);
+                list.innerHTML += `<div class="meal-row">
+                    <div class="meal-header"><span class="meal-type">${meal.tipo}</span><button class="btn-cam ${record?'done':''}" onclick="cam('${meal.tipo}')">${record?'✓ OK':'📸'}</button></div>
+                    <div style="font-size:0.95rem; margin-bottom:8px;">${meal.menu}</div>
+                    <div style="font-size:0.65rem; color:var(--yellow);">Meta: ${meal.kcal} kcal | P:${meal.p}g H:${meal.c}g G:${meal.f}g</div>
+                    ${record ? `<div class="macro-compare">
+                        <div class="macro-box"><span class="macro-label">Kcal</span><span class="macro-val">${record.kcal}</span></div>
+                        <div class="macro-box"><span class="macro-label">Prot</span><span class="macro-val">${record.p}g</span></div>
+                        <div class="macro-box"><span class="macro-label">HC</span><span class="macro-val">${record.c}g</span></div>
+                        <div class="macro-box"><span class="macro-label">Gr</span><span class="macro-val">${record.f}g</span></div>
+                    </div>` : ''}
+                </div>`;
             });
         } else {
             document.getElementById('mode-indicator').innerText = "MODO LIBRE";
-            list.innerHTML = `<p style="text-align:center; color:#666; font-size:0.8rem; margin-top:20px;">Sube tu dieta para comparar.</p>`;
+            list.innerHTML = `<p style="text-align:center; color:#666; font-size:0.8rem; margin-top:20px;">Sube tu dieta para empezar.</p>`;
         }
         
         const consumed = h.filter(x => x.t === selectedDateStr).reduce((acc, x) => acc + (parseInt(x.kcal) || 0), 0);
@@ -147,30 +153,11 @@
         document.getElementById('ring-progress').style.strokeDashoffset = 452 - (Math.min(consumed/goal, 1) * 452);
     }
 
-    function renderRow(meal, record) {
-        let stats = "";
-        if(record) {
-            const diff = (((record.kcal - meal.kcal) / meal.kcal) * 100).toFixed(0);
-            stats = `<div class="macro-compare">
-                <div class="macro-box"><span class="macro-label">Kcal</span><span class="macro-val">${record.kcal}</span><br><span class="diff-badge" style="background:${Math.abs(diff) < 15 ? 'var(--p)' : 'var(--red)'}">${diff > 0 ? '+' : ''}${diff}%</span></div>
-                <div class="macro-box"><span class="macro-label">Prot</span><span class="macro-val">${record.p}g</span></div>
-                <div class="macro-box"><span class="macro-label">HC</span><span class="macro-val">${record.c}g</span></div>
-                <div class="macro-box"><span class="macro-label">Gr</span><span class="macro-val">${record.f}g</span></div>
-            </div>`;
-        }
-        return `<div class="meal-row">
-            <div class="meal-header"><span class="meal-type">${meal.tipo}</span><button class="btn-cam ${record?'done':''}" onclick="cam('${meal.tipo}')">${record?'✓ OK':'📸 ANALIZAR'}</button></div>
-            <span class="meal-menu">${meal.menu}</span>
-            <div style="font-size:0.65rem; color:var(--yellow); font-weight:bold;">Meta: ${meal.kcal} kcal | P:${meal.p}g H:${meal.c}g G:${meal.f}g</div>
-            ${stats}
-        </div>`;
-    }
-
-    function cam(type) { currentMealType = type; document.getElementById('file').click(); }
+    function cam(type) { currentType = type; document.getElementById('file').click(); }
 
     async function analyzePlan() {
         const f = document.getElementById('plan-file').files[0]; if(!f) return;
-        setLog("⏳ LEYENDO DIETA...", "yellow");
+        setLog("⏳ LEYENDO DIETA...", "var(--yellow)");
         const b64 = await toBase64(f);
         try {
             const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${k}`, {
@@ -184,37 +171,33 @@
             const rawText = d.candidates[0].content.parts[0].text;
             myPlan = JSON.parse(rawText.match(/\{.*\}/s)[0]);
             localStorage.setItem('fit_plan', JSON.stringify(myPlan));
-            setLog("✅ DIETA CARGADA", "p"); update();
-        } catch (e) { setLog("❌ ERROR: " + e.message, "red"); }
+            setLog("✅ DIETA CARGADA", "var(--p)"); update();
+        } catch (e) { setLog("❌ ERROR: " + e.message, "var(--red)"); }
     }
 
     async function runAnalysis() {
         const f = document.getElementById('file').files[0]; if(!f) return;
-        setLog(`⏳ ANALIZANDO ${currentMealType}...`, "yellow");
+        setLog(`⏳ ANALIZANDO ${currentType}...`, "var(--yellow)");
         const b64 = await toBase64(f);
         try {
             const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${k}`, {
                 method: 'POST', headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ contents: [{ parts: [
-                    { text: "Analiza foto. Devuelve SOLO JSON: {kcal: num, p: num, c: num, f: num}" },
+                    { text: "Analiza la comida de la foto. Devuelve SOLO JSON: {kcal: num, p: num, c: num, f: num}" },
                     { inline_data: { mime_type: "image/jpeg", data: b64.split(',')[1] } }
                 ]}] })
             });
             const d = await res.json();
             const rawText = d.candidates[0].content.parts[0].text;
             const result = JSON.parse(rawText.match(/\{.*\}/s)[0]);
-            h = h.filter(x => !(x.t === selectedDateStr && x.type === currentMealType));
-            h.push({ ...result, t: selectedDateStr, type: currentMealType });
+            h = h.filter(x => !(x.t === selectedDateStr && x.type === currentType));
+            h.push({ ...result, t: selectedDateStr, type: currentType });
             localStorage.setItem('fit_h', JSON.stringify(h));
-            setLog("✅ ANALIZADO", "p"); update();
-        } catch (e) { setLog("❌ ERROR: " + e.message, "red"); }
+            setLog("✅ ANALIZADO", "var(--p)"); update();
+        } catch (e) { setLog("❌ ERROR: " + e.message, "var(--red)"); }
     }
 
-    function setLog(txt, colorVar) {
-        const l = document.getElementById('log');
-        l.innerText = txt;
-        l.style.color = `var(--${colorVar})`;
-    }
+    function setLog(txt, color) { const l = document.getElementById('log'); l.innerText = txt; l.style.color = color; }
     const toBase64 = f => new Promise(r => { const rd = new FileReader(); rd.readAsDataURL(f); rd.onload = () => r(rd.result); });
 </script>
 </body>
