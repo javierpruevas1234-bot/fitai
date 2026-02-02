@@ -163,11 +163,12 @@
             const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${k}`, {
                 method: 'POST', headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ contents: [{ parts: [
-                    { text: "Extrae la dieta en JSON (lunes a domingo). Formato: {'lunes':[{tipo:'Desayuno', menu:'...', kcal:num, p:num, c:num, f:num},...], ...}. Solo JSON." },
+                    { text: "Extrae la dieta en JSON (lunes a domingo). Formato: {'lunes':[{tipo:'Desayuno', menu:'...', kcal:num, p:num, c:num, f:num},...], ...}. Solo JSON puro." },
                     { inline_data: { mime_type: "image/jpeg", data: b64.split(',')[1] } }
                 ]}] })
             });
             const d = await res.json();
+            if(!d.candidates || !d.candidates[0]) throw new Error("La IA no devolvió resultados. Revisa tu API Key.");
             const rawText = d.candidates[0].content.parts[0].text;
             myPlan = JSON.parse(rawText.match(/\{.*\}/s)[0]);
             localStorage.setItem('fit_plan', JSON.stringify(myPlan));
@@ -188,6 +189,7 @@
                 ]}] })
             });
             const d = await res.json();
+            if(!d.candidates || !d.candidates[0]) throw new Error("La IA no detectó la comida. Intenta otra foto.");
             const rawText = d.candidates[0].content.parts[0].text;
             const result = JSON.parse(rawText.match(/\{.*\}/s)[0]);
             h = h.filter(x => !(x.t === selectedDateStr && x.type === currentType));
